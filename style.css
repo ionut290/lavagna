@@ -376,3 +376,8 @@ h2 { font-size: clamp(1.35rem, 5vw, 2.3rem); }
     border-radius: 18px;
   }
 }
+
+.lookup-form select {
+  display: block;
+  appearance: auto;
+}

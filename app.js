@@ -41,12 +41,13 @@ function populateCommesse() {
   jobSelect.replaceChildren();
 
   if (COMMESSE.length === 0) {
-    const option = new Option('Nessuna commessa disponibile', '', true, true);
-    jobSelect.append(option);
-    jobSelect.disabled = true;
+    jobSelect.append(new Option('Seleziona commessa', '', true, true));
+    jobSelect.append(new Option('Collega prima i dati della lavagna', 'no-data'));
+    jobSelect.disabled = false;
     return;
   }
 
+  jobSelect.disabled = false;
   jobSelect.append(new Option('Seleziona una commessa', '', true, true));
   COMMESSE.forEach(commessa => {
     jobSelect.append(new Option(commessa.nome, commessa.id));
