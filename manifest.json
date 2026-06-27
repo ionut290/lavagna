@@ -1,0 +1,13 @@
+{
+  "name": "Lavagna Avola",
+  "short_name": "Lavagna Avola",
+  "description": "App dedicata per aprire e consultare la Lavagna Avola.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#ecfeff",
+  "theme_color": "#0f766e",
+  "lang": "it",
+  "categories": ["productivity", "utilities"]
+}
