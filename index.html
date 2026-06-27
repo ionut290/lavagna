@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#0f766e" />
+    <meta name="description" content="App dedicata per aprire e consultare la Lavagna Avola." />
+    <title>Lavagna Avola</title>
+    <link rel="manifest" href="manifest.json" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="hero" id="home">
+        <div class="logo" aria-hidden="true">LA</div>
+        <p class="eyebrow">Web app dedicata</p>
+        <h1>Lavagna Avola</h1>
+        <p class="subtitle">Seleziona commessa e data per vedere solo la squadra, senza aprire tutta la lavagna.</p>
+        <div class="login-info" role="note">
+          <strong>Login sicuro</strong>
+          <span>Accedi dalla pagina ufficiale Eggsnext aperta dall’app. Per sicurezza l’app può ricordare solo il nome utente, non la password.</span>
+        </div>
+
+        <form class="login-helper" id="loginHelper">
+          <label for="savedUsername">Nome utente da ricordare</label>
+          <input id="savedUsername" name="username" type="text" autocomplete="username" placeholder="es. mario.rossi" />
+          <button class="secondary-button" type="submit">Salva utente</button>
+          <button class="secondary-button" id="loginOfficial" type="button">Accedi alla lavagna</button>
+        </form>
+        <form class="lookup-form" id="lookupForm">
+          <label for="jobSelect">Commessa</label>
+          <select id="jobSelect" name="commessa" required>
+            <option value="">Caricamento commesse…</option>
+          </select>
+
+          <label for="workDate">Data</label>
+          <input id="workDate" name="data" type="date" required />
+
+          <button class="primary-button" type="submit">Mostra squadra</button>
+        </form>
+
+        <section class="team-result" id="teamResult" aria-live="polite" hidden></section>
+
+        <details class="data-manager">
+          <summary>Aggiungi o aggiorna commessa</summary>
+          <form id="saveTeamForm">
+            <label for="jobName">Nome commessa</label>
+            <input id="jobName" name="jobName" type="text" placeholder="Es. Cantiere Avola" required />
+
+            <label for="teamDate">Data squadra</label>
+            <input id="teamDate" name="teamDate" type="date" required />
+
+            <label for="teamMembers">Squadra</label>
+            <textarea id="teamMembers" name="teamMembers" rows="3" placeholder="Un nome per riga oppure separati da virgola" required></textarea>
+
+            <button class="secondary-button" type="submit">Salva commessa</button>
+          </form>
+        </details>
+
+        <button class="link-button" id="openBoard" type="button">Apri lavagna completa</button>
+      </header>
+
+      <main class="board-panel" id="boardPanel" hidden>
+        <div class="panel-toolbar">
+          <div>
+            <p class="eyebrow">Consultazione</p>
+            <h2>Lavagna Avola</h2>
+            <p class="toolbar-hint">Se viene richiesto, effettua il login nella pagina ufficiale.</p>
+          </div>
+          <button class="secondary-button" id="backHome" type="button">Home</button>
+        </div>
+
+        <div class="notice" id="frameNotice" role="status" hidden>
+          La lavagna non può essere visualizzata dentro l’app.
+          <span>Si aprirà in una nuova scheda per permettere il login e la consultazione.</span>
+        </div>
+
+        <div class="iframe-wrap" id="iframeWrap" aria-live="polite">
+          <div class="loader" id="loader">Caricamento lavagna…</div>
+        </div>
+      </main>
+    </div>
+
+    <a class="browser-button" id="openBrowser" href="https://coopavola.eggsnext.cloud/main/functions/app/eggs-lavagna/lavagna" target="_blank" rel="noopener noreferrer">Apri in browser</a>
+
+    <script src="app.js" defer></script>
+  </body>
+</html>
