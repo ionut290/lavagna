@@ -15,8 +15,26 @@
         <div class="logo" aria-hidden="true">LA</div>
         <p class="eyebrow">Web app dedicata</p>
         <h1>Lavagna Avola</h1>
-        <p class="subtitle">Apri e consulta rapidamente la lavagna da telefono, tablet o computer.</p>
-        <button class="primary-button" id="openBoard" type="button">Apri Lavagna</button>
+        <p class="subtitle">Seleziona commessa e data per vedere solo la squadra, senza aprire tutta la lavagna.</p>
+        <div class="login-info" role="note">
+          <strong>Accesso richiesto</strong>
+          <span>La lavagna richiede il login: inserisci username e password solo nella pagina ufficiale Eggsnext. L’app non salva credenziali.</span>
+        </div>
+        <form class="lookup-form" id="lookupForm">
+          <label for="jobSelect">Commessa</label>
+          <select id="jobSelect" name="commessa" required>
+            <option value="">Caricamento commesse…</option>
+          </select>
+
+          <label for="workDate">Data</label>
+          <input id="workDate" name="data" type="date" required />
+
+          <button class="primary-button" type="submit">Mostra squadra</button>
+        </form>
+
+        <section class="team-result" id="teamResult" aria-live="polite" hidden></section>
+
+        <button class="link-button" id="openBoard" type="button">Apri lavagna completa</button>
       </header>
 
       <main class="board-panel" id="boardPanel" hidden>
@@ -24,12 +42,14 @@
           <div>
             <p class="eyebrow">Consultazione</p>
             <h2>Lavagna Avola</h2>
+            <p class="toolbar-hint">Se viene richiesto, effettua il login nella pagina ufficiale.</p>
           </div>
           <button class="secondary-button" id="backHome" type="button">Home</button>
         </div>
 
         <div class="notice" id="frameNotice" role="status" hidden>
           La lavagna non può essere visualizzata dentro l’app.
+          <span>Si aprirà in una nuova scheda per permettere il login e la consultazione.</span>
         </div>
 
         <div class="iframe-wrap" id="iframeWrap" aria-live="polite">
