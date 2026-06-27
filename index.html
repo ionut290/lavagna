@@ -17,9 +17,16 @@
         <h1>Lavagna Avola</h1>
         <p class="subtitle">Seleziona commessa e data per vedere solo la squadra, senza aprire tutta la lavagna.</p>
         <div class="login-info" role="note">
-          <strong>Accesso richiesto</strong>
-          <span>La lavagna richiede il login: inserisci username e password solo nella pagina ufficiale Eggsnext. L’app non salva credenziali.</span>
+          <strong>Login sicuro</strong>
+          <span>Accedi dalla pagina ufficiale Eggsnext aperta dall’app. Per sicurezza l’app può ricordare solo il nome utente, non la password.</span>
         </div>
+
+        <form class="login-helper" id="loginHelper">
+          <label for="savedUsername">Nome utente da ricordare</label>
+          <input id="savedUsername" name="username" type="text" autocomplete="username" placeholder="es. mario.rossi" />
+          <button class="secondary-button" type="submit">Salva utente</button>
+          <button class="secondary-button" id="loginOfficial" type="button">Accedi alla lavagna</button>
+        </form>
         <form class="lookup-form" id="lookupForm">
           <label for="jobSelect">Commessa</label>
           <select id="jobSelect" name="commessa" required>
@@ -33,6 +40,22 @@
         </form>
 
         <section class="team-result" id="teamResult" aria-live="polite" hidden></section>
+
+        <details class="data-manager">
+          <summary>Aggiungi o aggiorna commessa</summary>
+          <form id="saveTeamForm">
+            <label for="jobName">Nome commessa</label>
+            <input id="jobName" name="jobName" type="text" placeholder="Es. Cantiere Avola" required />
+
+            <label for="teamDate">Data squadra</label>
+            <input id="teamDate" name="teamDate" type="date" required />
+
+            <label for="teamMembers">Squadra</label>
+            <textarea id="teamMembers" name="teamMembers" rows="3" placeholder="Un nome per riga oppure separati da virgola" required></textarea>
+
+            <button class="secondary-button" type="submit">Salva commessa</button>
+          </form>
+        </details>
 
         <button class="link-button" id="openBoard" type="button">Apri lavagna completa</button>
       </header>

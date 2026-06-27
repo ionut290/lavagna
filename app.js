@@ -1,8 +1,12 @@
 const BOARD_URL = 'https://coopavola.eggsnext.cloud/main/functions/app/eggs-lavagna/lavagna';
 
 // La lavagna è protetta da login e non espone dati leggibili da questa PWA statica.
-// Quando sarà disponibile un export/API ufficiale, compilare questo array con dati reali.
-const COMMESSE = [];
+// I dati inseriti/aggiornati nell'app vengono salvati automaticamente sul dispositivo.
+const STORAGE_KEYS = {
+  commesse: 'lavagna-avola-commesse',
+  username: 'lavagna-avola-username'
+};
+let COMMESSE = [];
 
 const home = document.getElementById('home');
 const boardPanel = document.getElementById('boardPanel');
@@ -16,6 +20,13 @@ const lookupForm = document.getElementById('lookupForm');
 const jobSelect = document.getElementById('jobSelect');
 const workDate = document.getElementById('workDate');
 const teamResult = document.getElementById('teamResult');
+const loginHelper = document.getElementById('loginHelper');
+const savedUsername = document.getElementById('savedUsername');
+const loginOfficialButton = document.getElementById('loginOfficial');
+const saveTeamForm = document.getElementById('saveTeamForm');
+const jobName = document.getElementById('jobName');
+const teamDate = document.getElementById('teamDate');
+const teamMembers = document.getElementById('teamMembers');
 
 let fallbackTimer;
 
@@ -31,10 +42,47 @@ function formatDate(dateValue) {
   }).format(new Date(`${dateValue}T00:00:00`));
 }
 
-function setTodayAsDefaultDate() {
+function getTodayValue() {
   const today = new Date();
   const timezoneOffset = today.getTimezoneOffset() * 60000;
-  workDate.value = new Date(today.getTime() - timezoneOffset).toISOString().slice(0, 10);
+  return new Date(today.getTime() - timezoneOffset).toISOString().slice(0, 10);
+}
+
+function setTodayAsDefaultDate() {
+  const todayValue = getTodayValue();
+  workDate.value = todayValue;
+  teamDate.value = todayValue;
+}
+
+
+function loadSavedData() {
+  try {
+    COMMESSE = JSON.parse(localStorage.getItem(STORAGE_KEYS.commesse)) || [];
+  } catch {
+    COMMESSE = [];
+  }
+
+  savedUsername.value = localStorage.getItem(STORAGE_KEYS.username) || '';
+}
+
+function saveCommesse() {
+  localStorage.setItem(STORAGE_KEYS.commesse, JSON.stringify(COMMESSE));
+}
+
+function slugify(value) {
+  return value
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '') || `commessa-${Date.now()}`;
+}
+
+function parseTeamMembers(value) {
+  return value
+    .split(/[\n,]+/)
+    .map(person => person.trim())
+    .filter(Boolean);
 }
 
 function populateCommesse() {
@@ -66,12 +114,12 @@ function renderTeamResult(event) {
 
   teamResult.hidden = false;
 
-  if (COMMESSE.length === 0) {
+  if (COMMESSE.length === 0 || commessaId === 'no-data') {
     teamResult.innerHTML = `
-      <h2>Dati commesse non collegati</h2>
-      <p>Non posso mostrare automaticamente tutte le commesse perché la lavagna richiede login e questa PWA statica non può leggere dati protetti o salvare credenziali.</p>
-      <p>Per mostrare qui la squadra senza aprire tutta la lavagna serve un export/API ufficiale della lavagna oppure un backend autenticato.</p>
-      <button class="secondary-button" type="button" data-open-browser>Apri la lavagna per il login</button>
+      <h2>Nessuna commessa salvata</h2>
+      <p>Effettua il login nella lavagna ufficiale dall’app, poi aggiungi qui le commesse e le squadre: verranno salvate automaticamente su questo dispositivo.</p>
+      <p>Per importarle automaticamente dalla lavagna serve un'API/export ufficiale o un backend autenticato: la password non viene salvata nel frontend.</p>
+      <button class="secondary-button" type="button" data-open-browser>Accedi alla lavagna</button>
     `;
     return;
   }
@@ -130,6 +178,44 @@ function openBoardInApp() {
   }, 6000);
 }
 
+function saveUsername(event) {
+  event.preventDefault();
+  localStorage.setItem(STORAGE_KEYS.username, savedUsername.value.trim());
+  teamResult.hidden = false;
+  teamResult.innerHTML = '<h2>Utente salvato</h2><p>Il nome utente è stato ricordato su questo dispositivo. La password non viene salvata.</p>';
+}
+
+function saveTeam(event) {
+  event.preventDefault();
+  const name = jobName.value.trim();
+  const date = teamDate.value;
+  const members = parseTeamMembers(teamMembers.value);
+
+  if (!name || !date || members.length === 0) {
+    return;
+  }
+
+  const id = slugify(name);
+  let commessa = COMMESSE.find(item => item.id === id);
+
+  if (!commessa) {
+    commessa = { id, nome: name, squadre: {} };
+    COMMESSE.push(commessa);
+  }
+
+  commessa.nome = name;
+  commessa.squadre[date] = members;
+  COMMESSE.sort((first, second) => first.nome.localeCompare(second.nome, 'it'));
+  saveCommesse();
+  populateCommesse();
+  jobSelect.value = id;
+  workDate.value = date;
+  teamResult.hidden = false;
+  teamResult.innerHTML = `<h2>Commessa salvata</h2><p><strong>${name}</strong> del <strong>${formatDate(date)}</strong> è stata salvata automaticamente su questo dispositivo.</p>`;
+  saveTeamForm.reset();
+  teamDate.value = getTodayValue();
+}
+
 function goHome() {
   window.clearTimeout(fallbackTimer);
   boardPanel.hidden = true;
@@ -139,10 +225,14 @@ function goHome() {
   iframeWrap.querySelector('iframe')?.remove();
 }
 
+loadSavedData();
 populateCommesse();
 setTodayAsDefaultDate();
 
 lookupForm.addEventListener('submit', renderTeamResult);
+loginHelper.addEventListener('submit', saveUsername);
+loginOfficialButton.addEventListener('click', openBoardInApp);
+saveTeamForm.addEventListener('submit', saveTeam);
 teamResult.addEventListener('click', event => {
   if (event.target.matches('[data-open-browser]')) {
     openInBrowser();

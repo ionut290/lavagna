@@ -1,4 +1,4 @@
-const CACHE_NAME = 'lavagna-avola-v2';
+const CACHE_NAME = 'lavagna-avola-v3';
 const APP_SHELL = [
   './',
   './index.html',
