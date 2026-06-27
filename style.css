@@ -93,12 +93,14 @@ h2 { font-size: clamp(1.35rem, 5vw, 2.3rem); }
 }
 
 .login-info {
+  width: 100%;
   max-width: 520px;
+  border: 1px solid #bae6fd;
+  cursor: pointer;
   margin: 0 auto 28px;
   padding: 14px 16px;
   display: grid;
   gap: 4px;
-  border: 1px solid #bae6fd;
   border-radius: 20px;
   color: #0c4a6e;
   background: #f0f9ff;
@@ -108,6 +110,35 @@ h2 { font-size: clamp(1.35rem, 5vw, 2.3rem); }
 }
 
 .login-info strong { color: #075985; }
+
+.login-info small {
+  color: var(--primary-dark);
+  font-weight: 900;
+  text-decoration: underline;
+}
+
+.login-info:hover,
+.login-info:focus-visible {
+  border-color: #38bdf8;
+  box-shadow: 0 12px 28px rgba(14, 165, 233, 0.16);
+}
+
+.login-info:focus-visible {
+  outline: 4px solid rgba(245, 158, 11, 0.45);
+  outline-offset: 3px;
+}
+
+.sync-status {
+  min-height: 1.3em;
+  margin: 0;
+  color: var(--primary-dark);
+  font-size: 0.9rem;
+  font-weight: 800;
+  line-height: 1.35;
+  text-align: center;
+}
+
+.sync-status--warning { color: #9a3412; }
 
 .primary-button, .secondary-button, .browser-button {
   border: 0;

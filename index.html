@@ -16,10 +16,11 @@
         <p class="eyebrow">Web app dedicata</p>
         <h1>Lavagna Avola</h1>
         <p class="subtitle">Seleziona commessa e data per vedere solo la squadra, senza aprire tutta la lavagna.</p>
-        <div class="login-info" role="note">
+        <button class="login-info" id="loginInfo" type="button" aria-label="Apri login sicuro della lavagna ufficiale">
           <strong>Login sicuro</strong>
           <span>Accedi dalla pagina ufficiale Eggsnext aperta dall’app. Per sicurezza l’app può ricordare solo il nome utente, non la password.</span>
-        </div>
+          <small>Tocca qui per entrare</small>
+        </button>
 
         <form class="login-helper" id="loginHelper">
           <label for="savedUsername">Nome utente da ricordare</label>
@@ -37,6 +38,7 @@
           <input id="workDate" name="data" type="date" required />
 
           <button class="primary-button" type="submit">Mostra squadra</button>
+          <p class="sync-status" id="syncStatus" role="status" aria-live="polite"></p>
         </form>
 
         <section class="team-result" id="teamResult" aria-live="polite" hidden></section>
