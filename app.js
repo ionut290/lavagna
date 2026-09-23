@@ -275,8 +275,8 @@ function ensureBoardFrame() {
 
 function openBoardInApp() {
   // Eggsnext viene aperto come pagina principale e non in un iframe.
-  // In questo modo Safari tratta i cookie di sessione come proprietari
-  // e può mantenere l'accesso tra un'apertura e l'altra.
+  // In questo modo Edge o Chrome trattano i cookie di sessione come proprietari
+  // e possono mantenere l'accesso tra un'apertura e l'altra su Windows.
   openOfficialBoard();
 }
 
@@ -284,7 +284,7 @@ function saveUsername(event) {
   event.preventDefault();
   rememberLastUsername();
   teamResult.hidden = false;
-  teamResult.innerHTML = '<h2>Accesso preparato</h2><p>L’ultimo nome utente è stato ricordato. Durante il login ufficiale scegli “Salva password” su iPhone: la password resterà protetta dal portachiavi e potrà essere compilata con Face ID.</p>';
+  teamResult.innerHTML = '<h2>Accesso preparato</h2><p>L’ultimo nome utente è stato ricordato. Durante il login ufficiale scegli “Salva password” in Edge o Chrome: il browser potrà compilarla automaticamente e sincronizzarla tra i tuoi PC Windows.</p>';
 }
 
 function saveTeam(event) {
