@@ -42,6 +42,11 @@ function rememberLastUsername() {
   }
 }
 
+function openOfficialBoard() {
+  rememberLastUsername();
+  window.location.assign(BOARD_URL);
+}
+
 function openInBrowser() {
   rememberLastUsername();
   window.open(BOARD_URL, '_blank', 'noopener,noreferrer');
@@ -269,23 +274,10 @@ function ensureBoardFrame() {
 }
 
 function openBoardInApp() {
-  rememberLastUsername();
-  autoDownloadBoardData();
-  home.hidden = true;
-  boardPanel.hidden = false;
-  frameNotice.hidden = true;
-
-  const frameAlreadyLoaded = Boolean(boardFrame);
-  loader.hidden = frameAlreadyLoaded;
-  ensureBoardFrame();
-
-  if (!frameAlreadyLoaded) {
-    fallbackTimer = window.setTimeout(() => {
-      if (!loader.hidden) {
-        showFallback();
-      }
-    }, 6000);
-  }
+  // Eggsnext viene aperto come pagina principale e non in un iframe.
+  // In questo modo Safari tratta i cookie di sessione come proprietari
+  // e può mantenere l'accesso tra un'apertura e l'altra.
+  openOfficialBoard();
 }
 
 function saveUsername(event) {

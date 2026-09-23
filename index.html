@@ -18,8 +18,8 @@
         <p class="subtitle">Seleziona commessa e data per vedere solo la squadra, senza aprire tutta la lavagna.</p>
         <button class="login-info" id="loginInfo" type="button" aria-label="Apri login sicuro della lavagna ufficiale">
           <strong>Login sicuro</strong>
-          <span>L’app ricorda l’ultimo nome utente. La password resta protetta nel portachiavi di iPhone e può essere compilata con Face ID.</span>
-          <small>Tocca qui per entrare e mantenere la sessione</small>
+          <span>Eggsnext si apre direttamente, così iPhone può conservare la sessione e usare la password protetta con Face ID.</span>
+          <small>Tocca qui per entrare senza il riquadro che perdeva l’accesso</small>
         </button>
 
         <form class="login-helper" id="loginHelper">
@@ -27,7 +27,7 @@
           <input id="savedUsername" name="username" type="text" autocomplete="username" placeholder="es. mario.rossi" />
           <button class="secondary-button" type="submit">Ricorda utente</button>
           <button class="secondary-button" id="loginOfficial" type="button">Accedi alla lavagna</button>
-          <p class="toolbar-hint">Al primo accesso scegli “Salva password” su iPhone. Nei successivi accessi potrai usare Face ID senza riscriverla.</p>
+          <p class="toolbar-hint">Effettua l’accesso una sola volta e scegli “Salva password”. Finché Eggsnext mantiene valida la sessione, non verranno richiesti nuovamente utente e password.</p>
         </form>
         <form class="lookup-form" id="lookupForm">
           <label for="jobSelect">Commessa</label>
@@ -60,7 +60,7 @@
           </form>
         </details>
 
-        <button class="link-button" id="openBoard" type="button">Apri lavagna completa</button>
+        <button class="link-button" id="openBoard" type="button">Apri lavagna e mantieni accesso</button>
       </header>
 
       <main class="board-panel" id="boardPanel" hidden>
