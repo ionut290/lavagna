@@ -18,15 +18,16 @@
         <p class="subtitle">Seleziona commessa e data per vedere solo la squadra, senza aprire tutta la lavagna.</p>
         <button class="login-info" id="loginInfo" type="button" aria-label="Apri login sicuro della lavagna ufficiale">
           <strong>Login sicuro</strong>
-          <span>Accedi dalla pagina ufficiale Eggsnext aperta dall’app. Per sicurezza l’app può ricordare solo il nome utente, non la password.</span>
-          <small>Tocca qui per entrare</small>
+          <span>L’app ricorda l’ultimo nome utente. La password resta protetta nel portachiavi di iPhone e può essere compilata con Face ID.</span>
+          <small>Tocca qui per entrare e mantenere la sessione</small>
         </button>
 
         <form class="login-helper" id="loginHelper">
           <label for="savedUsername">Nome utente da ricordare</label>
           <input id="savedUsername" name="username" type="text" autocomplete="username" placeholder="es. mario.rossi" />
-          <button class="secondary-button" type="submit">Salva utente</button>
+          <button class="secondary-button" type="submit">Ricorda utente</button>
           <button class="secondary-button" id="loginOfficial" type="button">Accedi alla lavagna</button>
+          <p class="toolbar-hint">Al primo accesso scegli “Salva password” su iPhone. Nei successivi accessi potrai usare Face ID senza riscriverla.</p>
         </form>
         <form class="lookup-form" id="lookupForm">
           <label for="jobSelect">Commessa</label>

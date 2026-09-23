@@ -33,8 +33,17 @@ const syncStatus = document.getElementById('syncStatus');
 
 let fallbackTimer;
 let autoSyncStarted = false;
+let boardFrame = null;
+
+function rememberLastUsername() {
+  const username = savedUsername.value.trim();
+  if (username) {
+    localStorage.setItem(STORAGE_KEYS.username, username);
+  }
+}
 
 function openInBrowser() {
+  rememberLastUsername();
   window.open(BOARD_URL, '_blank', 'noopener,noreferrer');
 }
 
@@ -237,42 +246,53 @@ function showFallback() {
   openInBrowser();
 }
 
-function openBoardInApp() {
-  autoDownloadBoardData();
-  home.hidden = true;
-  boardPanel.hidden = false;
-  frameNotice.hidden = true;
-  loader.hidden = false;
+function ensureBoardFrame() {
+  if (boardFrame) {
+    return boardFrame;
+  }
 
-  iframeWrap.querySelector('iframe')?.remove();
+  boardFrame = document.createElement('iframe');
+  boardFrame.title = 'Lavagna Avola';
+  boardFrame.src = BOARD_URL;
+  boardFrame.loading = 'eager';
+  boardFrame.referrerPolicy = 'no-referrer-when-downgrade';
+  boardFrame.allow = 'fullscreen; clipboard-read; clipboard-write';
 
-  const iframe = document.createElement('iframe');
-  iframe.title = 'Lavagna Avola';
-  iframe.src = BOARD_URL;
-  iframe.loading = 'eager';
-  iframe.referrerPolicy = 'no-referrer-when-downgrade';
-  iframe.allow = 'fullscreen; clipboard-read; clipboard-write';
-
-  iframe.addEventListener('load', () => {
+  boardFrame.addEventListener('load', () => {
     window.clearTimeout(fallbackTimer);
     loader.hidden = true;
   });
 
-  iframe.addEventListener('error', showFallback);
-  iframeWrap.appendChild(iframe);
+  boardFrame.addEventListener('error', showFallback);
+  iframeWrap.appendChild(boardFrame);
+  return boardFrame;
+}
 
-  fallbackTimer = window.setTimeout(() => {
-    if (!loader.hidden) {
-      showFallback();
-    }
-  }, 6000);
+function openBoardInApp() {
+  rememberLastUsername();
+  autoDownloadBoardData();
+  home.hidden = true;
+  boardPanel.hidden = false;
+  frameNotice.hidden = true;
+
+  const frameAlreadyLoaded = Boolean(boardFrame);
+  loader.hidden = frameAlreadyLoaded;
+  ensureBoardFrame();
+
+  if (!frameAlreadyLoaded) {
+    fallbackTimer = window.setTimeout(() => {
+      if (!loader.hidden) {
+        showFallback();
+      }
+    }, 6000);
+  }
 }
 
 function saveUsername(event) {
   event.preventDefault();
-  localStorage.setItem(STORAGE_KEYS.username, savedUsername.value.trim());
+  rememberLastUsername();
   teamResult.hidden = false;
-  teamResult.innerHTML = '<h2>Utente salvato</h2><p>Il nome utente è stato ricordato su questo dispositivo. La password non viene salvata.</p>';
+  teamResult.innerHTML = '<h2>Accesso preparato</h2><p>L’ultimo nome utente è stato ricordato. Durante il login ufficiale scegli “Salva password” su iPhone: la password resterà protetta dal portachiavi e potrà essere compilata con Face ID.</p>';
 }
 
 function saveTeam(event) {
@@ -311,8 +331,7 @@ function goHome() {
   boardPanel.hidden = true;
   home.hidden = false;
   frameNotice.hidden = true;
-  loader.hidden = false;
-  iframeWrap.querySelector('iframe')?.remove();
+  loader.hidden = true;
 }
 
 loadSavedData();
@@ -320,6 +339,7 @@ populateCommesse();
 setTodayAsDefaultDate();
 
 lookupForm.addEventListener('submit', renderTeamResult);
+savedUsername.addEventListener('change', rememberLastUsername);
 loginInfo.addEventListener('click', openBoardInApp);
 loginHelper.addEventListener('submit', saveUsername);
 loginOfficialButton.addEventListener('click', openBoardInApp);
